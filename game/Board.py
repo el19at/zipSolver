@@ -20,10 +20,15 @@ class Board():
         for direction, x, y in borderList:
             cell: Cell = self.grid[x][y]
             cell.addBorder(direction)
-            neib = self.getMoveCell(x, y, direction)
-            if neib:
-                opposite = (-1*direction[0], -1*direction[1])
+
+            # compute neighbor indices directly
+            nx, ny = x + direction[0], y + direction[1]
+            if 0 <= nx < self.dimension and 0 <= ny < self.dimension:
+                neib: Cell = self.grid[nx][ny]
+                opposite = (-direction[0], -direction[1])
                 neib.addBorder(opposite)
+
+
 
         
     def printGrid(self):

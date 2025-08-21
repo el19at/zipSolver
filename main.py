@@ -1,18 +1,40 @@
-from game.Board import Board
-from solver.Solver import solve
+from playwright.sync_api import sync_playwright
+from solver.Solver import html_to_board, solve
 from ui.BoardViewer import BoardViewer
-from game.Constants import dirs
+import time
 
 def main():
-    #start = (0, 0)
-    #end = (5, 5)
-    numbers = [(0,0), (5,5), (4,1), (2,1), (3,4), (3,2), (1,4), (2,3)]
-    borders = [[dirs.DOWN, 0, 0], [dirs.DOWN, 0, 1], [dirs.DOWN, 0, 2]]
-    board = Board(6, numbers)
+    url = "https://www.linkedin.com/games/zip"
+
+    with sync_playwright() as p:
+        print('get the game board...')
+        btnId = '#launch-footer-start-button'
+        browser = p.chromium.launch(headless=True)  # False = see the browser
+        page = browser.new_page()
+        page.goto(url)
+        iframe_element = page.wait_for_selector("iframe.game-launch-page__iframe")
+        frame = iframe_element.content_frame()  # switch to iframe context
+
+        # Wait for the Start Game button inside the iframe
+        frame.wait_for_selector(btnId)
+        frame.click(btnId)
+
+        # Wait for the game grid inside the iframe
+        frame.wait_for_selector(".trail-grid")
+        htmlTxt = frame.content()
+        browser.close()
+
+    # Build board and solve
+    print('build board')
+    board = html_to_board(htmlTxt)
+    start = time.time()
+    print('solving...(be patient)')
     path = solve(board)
-    path.append(numbers[-1])
+    end = time.time()
+    print(f"solved in: {end - start:.6f} seconds")
+
     bv = BoardViewer(board, path)
     bv.show()
-    
+
 if __name__ == '__main__':
     main()

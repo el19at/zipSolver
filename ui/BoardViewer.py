@@ -8,7 +8,7 @@ class BoardViewer:
         self.board = board
         self.path = path if path is not None else []
 
-    def show(self):
+    def show(self, timeToShow: int = None):
         dim = self.board.dimension
         fig, ax = plt.subplots(figsize=(dim, dim))
 
@@ -60,4 +60,10 @@ class BoardViewer:
         ax.set_xticks([])
         ax.set_yticks([])
         ax.set_aspect("equal")
-        plt.show()
+        if timeToShow:
+            plt.draw()
+            plt.pause(timeToShow / 1000.0)  # convert ms → seconds
+            plt.close(fig)
+        else:
+            plt.show()
+            
