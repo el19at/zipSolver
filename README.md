@@ -35,7 +35,8 @@ playwright install
 
 ## Usage
 
-```python main.py
+```bash
+python main.py
 ```
 
 - Opens the LinkedIn Zip game page.
