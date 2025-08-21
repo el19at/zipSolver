@@ -4,6 +4,8 @@ A Python project that automatically fetches and solves the **LinkedIn Zip game**
 
 This project uses **Playwright** for browser automation, **BeautifulSoup** for HTML parsing, and a custom solver to calculate the optimal path through the numbered grid.
 
+![Demo of Zip Solver](demo.png)
+
 ---
 
 ## Features
